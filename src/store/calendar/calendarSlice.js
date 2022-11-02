@@ -28,7 +28,12 @@ export const calendarSlice = createSlice({
         onSetActivateNote: (state,  { payload} ) => {
             state.activateEvent = payload;
 
+        },
+        onAddNewEvent:  (state, { payload }) => {
+            state.events.push( payload );
+            state.activateEvent = null;
+            //limpiamos la nota activa
         }
     }
 });
-export const { onSetActivateNote } =  calendarSlice.actions;
+export const { onSetActivateNote, onAddNewEvent } =  calendarSlice.actions;

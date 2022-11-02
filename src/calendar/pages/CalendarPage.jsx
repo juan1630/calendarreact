@@ -7,10 +7,10 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { localizer, getMessagesEs  } from '../../helpers'
 
 //compnents
-import { NavBar, CalendarEventBox, CalendarModal } from "../components";
+import { NavBar, CalendarEventBox, CalendarModal, FabButton } from "../components";
 import { useState } from 'react';
 import { useUiStore, useCalendarStore } from '../../hooks';
-import { onSetActivateNote } from '../../store';
+
 
   //config de la libreria
 
@@ -71,6 +71,8 @@ export const CalendarPage = () => {
             />
 
             <CalendarModal />
+
+            <FabButton />
 
         </>)
 };

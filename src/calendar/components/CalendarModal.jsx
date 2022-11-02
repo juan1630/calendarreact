@@ -4,11 +4,12 @@ import { useCalendarStore, useUiStore  } from '../../hooks/index';
 
 //libs
 import { addHours, differenceInSeconds } from 'date-fns';
-import Modal from 'react-modal';
 import DatePicker, { registerLocale } from 'react-datepicker';
-import Swal from 'sweetalert2';
 
+import Swal from 'sweetalert2';
+import Modal from 'react-modal';
 import es from 'date-fns/locale/es';
+
 
 
 
@@ -36,7 +37,7 @@ const customStyles = {
 
 export const CalendarModal = () => {
 
-    const { activateEvent } = useCalendarStore();
+    const { activateEvent, startSavingEvent } = useCalendarStore();
     const [ formSubmited, setFormSubmited ] = useState(false);
 
     const [formValues, setFormValues] = useState({
@@ -86,9 +87,9 @@ export const CalendarModal = () => {
     
     //envio del formulario
 
-    const onsubmit = (event) => {
-        event.preventDefault();
+    const onsubmit = async (event) => {
 
+        event.preventDefault();
         setFormSubmited( true );
 
         const diference = differenceInSeconds( formValues.end, formValues.start );
@@ -102,7 +103,8 @@ export const CalendarModal = () => {
         //mensaje de error del titulo
 
         
-        //TODO: CERRAR MODAL
+        await startSavingEvent( formValues);
+        closeDateModal();
         //TODO: REMOVER ERRORES DE PANTALLA
     };
 
