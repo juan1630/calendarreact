@@ -19,21 +19,33 @@ const tempEvent = {
 export const calendarSlice = createSlice({
     name: 'calendar',
     initialState: {
-        events:[
-            tempEvent
-        ],
+        events:[],
         activateEvent : null
     },
     reducers: {
         onSetActivateNote: (state,  { payload} ) => {
             state.activateEvent = payload;
-
         },
         onAddNewEvent:  (state, { payload }) => {
             state.events.push( payload );
             state.activateEvent = null;
             //limpiamos la nota activa
+        },
+        onUpdateEvent: (state, { payload }) => {
+            state.events = state.events.map( event =>  {
+                if( event._id == payload.id) {
+                    return payload;
+                }
+
+                return event;
+            });
+        },
+        onDeleteEvent: (state) => {
+            if( state.activateEvent ){
+                state.events = state.events.filter( event => event._id !== state.activateEvent._id );
+                state.activateEvent = null; 
+            }
         }
     }
 });
-export const { onSetActivateNote, onAddNewEvent } =  calendarSlice.actions;
+export const { onSetActivateNote, onAddNewEvent, onUpdateEvent, onDeleteEvent } =  calendarSlice.actions;

@@ -10,6 +10,7 @@ import { localizer, getMessagesEs  } from '../../helpers'
 import { NavBar, CalendarEventBox, CalendarModal, FabButton } from "../components";
 import { useState } from 'react';
 import { useUiStore, useCalendarStore } from '../../hooks';
+import { FabDelete } from '../components/FabDelete';
 
 
   //config de la libreria
@@ -73,6 +74,7 @@ export const CalendarPage = () => {
             <CalendarModal />
 
             <FabButton />
+            <FabDelete />
 
         </>)
 };

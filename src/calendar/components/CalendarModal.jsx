@@ -11,9 +11,6 @@ import Modal from 'react-modal';
 import es from 'date-fns/locale/es';
 
 
-
-
-
 //CSS
 import "react-datepicker/dist/react-datepicker.css";
 import 'sweetalert2/dist/sweetalert2.min.css';
@@ -41,8 +38,9 @@ export const CalendarModal = () => {
     const [ formSubmited, setFormSubmited ] = useState(false);
 
     const [formValues, setFormValues] = useState({
-        title:'Juan',
-        notes: "patron",
+        title:'',
+        notes: "",
+        _id: '',
         start: new Date(),
         end:   addHours( new Date(), 2 )
     });
@@ -87,7 +85,7 @@ export const CalendarModal = () => {
     
     //envio del formulario
 
-    const onsubmit = async (event) => {
+    const onsubmit =  async (event) => {
 
         event.preventDefault();
         setFormSubmited( true );
@@ -101,9 +99,10 @@ export const CalendarModal = () => {
 
         if( formValues.title.length <= 3 ) return
         //mensaje de error del titulo
-
         
-        await startSavingEvent( formValues);
+        delete formValues._id
+        
+        await  startSavingEvent( formValues);
         closeDateModal();
         //TODO: REMOVER ERRORES DE PANTALLA
     };

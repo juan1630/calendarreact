@@ -1,7 +1,13 @@
 //encragado de las interacciones
 
 import { useDispatch, useSelector } from "react-redux";
-import { onAddNewEvent, onSetActivateNote } from "../store/calendar/calendarSlice";
+
+import { onAddNewEvent, 
+         onDeleteEvent, 
+         onSetActivateNote, 
+         onUpdateEvent } 
+         
+from "../store/calendar/calendarSlice";
 
 export const useCalendarStore = () => {
 
@@ -16,23 +22,28 @@ export const useCalendarStore = () => {
    const startSavingEvent = async( calendarEvent ) => {
       //TODO; LLEGAR AL BACLKEND
 
-      //todo bien 
-
       if( calendarEvent._id ) {
-         //algo
+         dispatch( onUpdateEvent( calendarEvent ));
       }else {
          dispatch( onAddNewEvent({ ...calendarEvent, _id: new Date().getTime()  }))
       }
 
    };
 
+   const startDeletingEvent = () => {
+      dispatch( onDeleteEvent());
+   }
+
      return {
       //* Properties
         events,
         activateEvent,
+        //retornamos si hay laguna nota activa
+        hasEventSelected: !!activateEvent,
 
         //* Methdos
         setActivateEvent,
-        startSavingEvent
+        startSavingEvent,
+        startDeletingEvent
      }
 };
