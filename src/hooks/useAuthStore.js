@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux"
 import calendarApi from "../api/calendarApi";
+import { clearErrorMessage, onChecking, onLogin, onLogout } from "../store/auth/authSlice";
 
 export const useAuthStore = () => {
  
@@ -8,13 +9,45 @@ export const useAuthStore = () => {
     const { status, user,  errorMessage } = useSelector( state => state.auth);
 
     const starLogin = async({email, password})=>{
-        try{
 
-            const resp = await calendarApi.post('/auth/', { email, password } );
-            console.log( resp );
+        //ponemos el estado de la aplicacion en checking
+        dispatch(onChecking());
+
+        try{
+            const {data} = await calendarApi.post('/auth/', { email, password } );
+            localStorage.setItem('token', data.token );
+            localStorage.setItem('token-init-date', new Date().getTime());
+            dispatch( onLogin({name: data.name, uid: data.uid}));
 
         }catch (error) {
-            console.log(error);
+            dispatch( onLogout('Credenciales incorrectas'));
+            setTimeout(() => {
+                //quitamos el error de la pantalla
+                dispatch( clearErrorMessage());
+            }, 10);
+        }
+    }
+
+    const starRegister = async ({ registerName, registerEmail, registerPassword, registerPassword2 }) => {
+        dispatch( onChecking());
+        
+        try {
+           const { data}  = await calendarApi.post('/auth/new',{ email: registerEmail, password: registerPassword, name: registerName });
+            console.log(data)
+           dispatch( onLogin());
+           localStorage.setItem('token', data.token );
+           localStorage.setItem('token-init-date', new Date().getTime());
+
+           dispatch( onLogin({name: data.name, uid: data.uid}));
+
+
+        }catch(error) {
+            console.log(error.response.data);
+            dispatch( onLogout(error.response.data?.msg));
+            setTimeout(() => {
+                //quitamos el error de la pantalla
+                dispatch( clearErrorMessage());
+            }, 10);
         }
     }
 
@@ -26,6 +59,7 @@ export const useAuthStore = () => {
         errorMessage,
 
         //* Methods 
-        starLogin
+        starLogin,
+        starRegister
     }
 }
