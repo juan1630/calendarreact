@@ -23,11 +23,27 @@ export const AppRouter = () =>{
 
                 {
                     ( status === 'not-authenticated' )
-                    ? <Route path="/auth/*" element={<LoginPage /> } />
-                    :  <Route path="/*" element={<CalendarPage /> } />
+                    ? (
+                        <>
+                            <Route path="/auth/*" element={<LoginPage /> } />
+                            <Route path="/*" element={<Navigate to='/auth/login' /> } />
+                        </>
+                        )
+                    :  (
+                        <>
+                            {/*
+                                La ruta prinipal es el "/" 
+                            */}
+                             <Route path="/" element={<CalendarPage /> } />
+                            <Route path="/*" element={<Navigate to='/' /> } />
+                            {/*
+                                Cualquier ruta que no coincida, se manda a la ruta principal
+                            */}
+                        </>
+
+                    )
                 }
                 
-                <Route path="/*" element={<Navigate to='/auth/login' /> } />
         </Routes>
     );
 };

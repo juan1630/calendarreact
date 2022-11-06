@@ -11,6 +11,7 @@ import { NavBar, CalendarEventBox, CalendarModal, FabButton } from "../component
 import { useState } from 'react';
 import { useUiStore, useCalendarStore } from '../../hooks';
 import { FabDelete } from '../components/FabDelete';
+import { useEffect } from 'react';
 
 
   //config de la libreria
@@ -18,9 +19,15 @@ import { FabDelete } from '../components/FabDelete';
 
 export const CalendarPage = () => {
 
+    const {  events, setActivateEvent, starLoadingEvents } = useCalendarStore();
+
     const { openDateModal } = useUiStore();
-    const {  events, setActivateEvent } = useCalendarStore();
     const [ lastView, setLastView ] = useState( localStorage.getItem('lastView') || 'week' );
+
+    useEffect( ()=> {
+        starLoadingEvents();
+    },[])
+
 
     const eventStyleGetter = (end, start , event, isSelected) =>{
         const style = {

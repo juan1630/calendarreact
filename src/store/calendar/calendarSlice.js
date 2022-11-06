@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { addHours } from 'date-fns';
 
-
+/*
 const tempEvent = {
     _id: new Date().getTime(),
     title: 'Cumpleaños del wey',
@@ -14,13 +14,14 @@ const tempEvent = {
         name: 'Juan'
     }
   };
-
+*/
 
 export const calendarSlice = createSlice({
     name: 'calendar',
     initialState: {
         events:[],
-        activateEvent : null
+        activateEvent : null,
+        isLoadingEvents : true
     },
     reducers: {
         onSetActivateNote: (state,  { payload} ) => {
@@ -45,7 +46,20 @@ export const calendarSlice = createSlice({
                 state.events = state.events.filter( event => event._id !== state.activateEvent._id );
                 state.activateEvent = null; 
             }
+        },
+        onSetEvents : (state, {payload = []}) => {
+          //  state.events = payload;
+            state.isLoadingEvents = false;
+
+            payload.forEach(event => {
+                const exists = state.events.some( dbEvent => dbEvent == event.id );
+                
+                if(!exists) {
+                    state.events.push( event );
+                }
+
+            });
         }
     }
 });
-export const { onSetActivateNote, onAddNewEvent, onUpdateEvent, onDeleteEvent } =  calendarSlice.actions;
+export const { onSetActivateNote, onAddNewEvent, onUpdateEvent, onDeleteEvent, onSetEvents } =  calendarSlice.actions;
