@@ -34,7 +34,7 @@ export const calendarSlice = createSlice({
         },
         onUpdateEvent: (state, { payload }) => {
             state.events = state.events.map( event =>  {
-                if( event._id == payload.id) {
+                if( event.id == payload.id) {
                     return payload;
                 }
 
@@ -43,7 +43,7 @@ export const calendarSlice = createSlice({
         },
         onDeleteEvent: (state) => {
             if( state.activateEvent ){
-                state.events = state.events.filter( event => event._id !== state.activateEvent._id );
+                state.events = state.events.filter( event => event._id !== state.activateEvent.id );
                 state.activateEvent = null; 
             }
         },
@@ -52,14 +52,20 @@ export const calendarSlice = createSlice({
             state.isLoadingEvents = false;
 
             payload.forEach(event => {
-                const exists = state.events.some( dbEvent => dbEvent == event.id );
+
+                const exists = state.events.some( dbEvent => dbEvent.id == event.id );
                 
                 if(!exists) {
                     state.events.push( event );
                 }
 
             });
+        },
+        onLogoutCalendar:( state ) => {
+            state.isLoadingEvents = true;
+            state.events = [];
+            state.activateEvent = null;
         }
     }
 });
-export const { onSetActivateNote, onAddNewEvent, onUpdateEvent, onDeleteEvent, onSetEvents } =  calendarSlice.actions;
+export const { onSetActivateNote, onAddNewEvent, onUpdateEvent, onDeleteEvent, onSetEvents, onLogoutCalendar } =  calendarSlice.actions;

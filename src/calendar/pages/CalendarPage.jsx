@@ -9,7 +9,7 @@ import { localizer, getMessagesEs  } from '../../helpers'
 //compnents
 import { NavBar, CalendarEventBox, CalendarModal, FabButton } from "../components";
 import { useState } from 'react';
-import { useUiStore, useCalendarStore } from '../../hooks';
+import { useUiStore, useCalendarStore, useAuthStore } from '../../hooks';
 import { FabDelete } from '../components/FabDelete';
 import { useEffect } from 'react';
 
@@ -19,19 +19,28 @@ import { useEffect } from 'react';
 
 export const CalendarPage = () => {
 
-    const {  events, setActivateEvent, starLoadingEvents } = useCalendarStore();
+    const { user } = useAuthStore();
 
+    const {  events, setActivateEvent, starLoadingEvents } = useCalendarStore();
+    
     const { openDateModal } = useUiStore();
     const [ lastView, setLastView ] = useState( localStorage.getItem('lastView') || 'week' );
 
+    //verificamos si es un even to
+    
+    
     useEffect( ()=> {
         starLoadingEvents();
     },[])
-
-
+    
+    
     const eventStyleGetter = (end, start , event, isSelected) =>{
+        
+        console.log(event); //devulve solo el inicio del evento
+        // const isMyEvent = (user.uid === event.user._id) || (user.uid === event.user.uid );
+        const isMyEvent = true;
         const style = {
-            backgroundColor: '#347CF7',
+            backgroundColor: isMyEvent ? '#347CF7': '#465660',
             borderRadius: '0px',
             opacity: 0.8,
             color: 'white'
